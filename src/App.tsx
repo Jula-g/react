@@ -1,13 +1,17 @@
 import React from 'react';
 import './App.css';
 import LoginForm from './login-form/LoginForm';
-import { Route, Navigate } from 'react-router-dom';
+import { Route, Navigate, BrowserRouter } from 'react-router-dom';
 import { Routes } from 'react-router-dom';
 import HomePage from './home-page/HomePage';
 import Book from './book/Book';
 import Loan from './loan/Loan';
 import BookList from './book/BookList';
 import LoanList from './loan/LoanList';
+import ApiProvider from './api/ApiProvider';
+import AddBookForm from './book/AddBookForm';
+import AddLoanForm from './loan/AddLoanForm';
+import AddReaderForm from './reader/AddReaderForm';
 
 const mockBooks: Book[] = [
   {
@@ -49,42 +53,53 @@ const mockLoans: Loan[] = [
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/home" element={<HomePage />}>
-        <Route
-          path="1"
-          element={
-            <>
-              <div
-                style={{
-                  height: '300px',
-                  width: '100%',
-                }}
-              >
-                <BookList books={mockBooks} />
-              </div>
-            </>
-          }
-        />
-        <Route
-          path="2"
-          element={
-            <>
-              <div
-                style={{
-                  height: '300px',
-                  width: '100%',
-                }}
-              >
-                <LoanList loans={mockLoans} />
-              </div>
-            </>
-          }
-        />
-      </Route>
-    </Routes>
+    <BrowserRouter>
+      <ApiProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route
+            path="*"
+            element={<h1 style={{ alignContent: 'center' }}>404</h1>}
+          />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/add-book" element={<AddBookForm />} />
+          <Route path="/add-loan" element={<AddLoanForm />} />
+          <Route path="/add-reader" element={<AddReaderForm />} />
+          <Route path="/home" element={<HomePage />}>
+            <Route
+              path="1"
+              element={
+                <>
+                  <div
+                    style={{
+                      height: '300px',
+                      width: '100%',
+                    }}
+                  >
+                    <BookList books={mockBooks} />
+                  </div>
+                </>
+              }
+            />
+            <Route
+              path="2"
+              element={
+                <>
+                  <div
+                    style={{
+                      height: '300px',
+                      width: '100%',
+                    }}
+                  >
+                    <LoanList loans={mockLoans} />
+                  </div>
+                </>
+              }
+            />
+          </Route>
+        </Routes>
+      </ApiProvider>
+    </BrowserRouter>
   );
 }
 

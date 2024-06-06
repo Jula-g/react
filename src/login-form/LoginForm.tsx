@@ -3,13 +3,28 @@ import { Button, TextField } from '@mui/material';
 import { Formik } from 'formik';
 import { useCallback, useMemo } from 'react';
 import * as yup from 'yup';
+import { useApi } from '../api/ApiProvider';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
+  const navigate = useNavigate();
+  const apiClient = useApi();
+
   const onSubmit = useCallback(
     (values: { username: string; password: string }, formik: any) => {
-      console.log(values);
+      apiClient.login(values).then((response) => {
+        console.log(response);
+        if (response.success) {
+          navigate('/home');
+        } else {
+          formik.setFieldError(
+            'username',
+            'Invalid username, password or no connection',
+          );
+        }
+      });
     },
-    [],
+    [apiClient, navigate],
   );
 
   const validationSchema = useMemo(
@@ -39,7 +54,8 @@ function LoginForm() {
           onSubmit={formik.handleSubmit}
           noValidate
         >
-          <h1>Login Form</h1>
+          <h1 style={{ fontStyle: 'italic' }}>Welcome in the library</h1>
+          <h2 style={{ fontStyle: 'italic' }}>Sign in</h2>
           <TextField
             id="username"
             label="Username"
@@ -65,9 +81,18 @@ function LoginForm() {
             variant="contained"
             type="submit"
             form="signForm"
+            style={{ backgroundColor: 'purple' }}
             disabled={!(formik.isValid && formik.dirty)}
           >
             Sign in
+          </Button>
+          <h4 style={{ fontStyle: 'italic' }}>Don't have an account?</h4>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: 'purple' }}
+            onClick={() => navigate('/register')}
+          >
+            Register
           </Button>
         </form>
       )}
