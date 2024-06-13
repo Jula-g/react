@@ -1,12 +1,11 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import { Outlet } from 'react-router-dom';
-import MenuAppBar from '../app-bar/MenuAppBar';
-import LoanList from '../loan/LoanList';
 import { useApi } from '../api/ApiProvider';
-import Loan from '../loan/Loan';
+import LoanList from './LoanList';
+import Loan from './Loan';
+import MenuAppBar from '../app-bar/MenuAppBar';
+import Box from '@mui/material/Box';
 
-function HomePage() {
+function LoanHistoryForm() {
   const apiClient = useApi();
   const [loans, setLoans] = React.useState<Loan[]>([]);
 
@@ -16,7 +15,7 @@ function HomePage() {
       .then((response) => {
         if (response.success && response.data) {
           if (Array.isArray(response.data)) {
-            const mappedLoans = response.data.map((loanDto) => ({
+            let mappedLoans = response.data.map((loanDto) => ({
               loanId: loanDto.loanId,
               book: loanDto.book,
               user: loanDto.user,
@@ -26,6 +25,10 @@ function HomePage() {
                 ? new Date(loanDto.returnDate)
                 : null,
             }));
+            mappedLoans = mappedLoans.filter(
+              (loan) => loan.returnDate !== null,
+            );
+
             setLoans(mappedLoans);
           } else {
             console.error('Invalid response data format: not an array');
@@ -40,29 +43,17 @@ function HomePage() {
   }, [apiClient]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <div>
       <MenuAppBar />
-      <h1
-        style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '120px' }}
-      >
-        Library Management System
-      </h1>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '20px',
-        }}
-      >
-        <h2 style={{ textAlign: 'center', fontStyle: 'italic' }}>
-          List of Your Loans
-        </h2>
-        <LoanList loans={loans} />
+      <Box>
+        <h1 style={{ textAlign: 'center', marginTop: '120px' }}>
+          Your Loan History
+        </h1>
       </Box>
-      <Outlet />
-    </Box>
+
+      <LoanList loans={loans} />
+    </div>
   );
 }
 
-export default HomePage;
+export default LoanHistoryForm;

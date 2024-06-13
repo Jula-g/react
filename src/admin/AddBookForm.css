@@ -1,9 +1,9 @@
-.Loan-list {
+.Add-book-form {
     padding: 5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     height: 100vh;
     gap: 2rem;
 }

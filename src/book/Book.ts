@@ -1,3 +1,9 @@
+export interface BookDetails {
+  genre: string;
+  summary: string;
+  coverUrl: string;
+}
+
 interface Book {
   bookId: number;
   isbn: string;
@@ -5,7 +11,8 @@ interface Book {
   author: string;
   publisher: string;
   yearPublished: number;
-  isAvailable: boolean;
+  availableCopies: number;
+  bookDetails: BookDetails;
 }
 
 export default Book;

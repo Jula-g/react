@@ -1,16 +1,18 @@
 import React from 'react';
-import LoanListItem from './LoanListItem';
-import Loan from './Loan';
-import './LoanList.css';
+import User from './User';
 import List from '@mui/material/List';
+import UserListItem from './UserListItem';
 
-interface LoanListProps {
-  loans: Loan[];
+interface UserListProps {
+  users: User[];
 }
 
-const LoanList: React.FC<LoanListProps> = ({ loans }) => {
+const UserList: React.FC<UserListProps> = ({ users }) => {
   return (
     <div className="Loan-list">
+      <h1 style={{ textAlign: 'center', fontStyle: 'italic' }}>
+        List of Users
+      </h1>
       <List
         sx={{
           width: '100%',
@@ -22,12 +24,12 @@ const LoanList: React.FC<LoanListProps> = ({ loans }) => {
         }}
         component="nav"
       >
-        {loans.map((loan) => (
-          <LoanListItem key={loan.loanId} loan={loan} />
+        {users.map((user) => (
+          <UserListItem key={user.userId} user={user} />
         ))}
       </List>
     </div>
   );
 };
 
-export default LoanList;
+export default UserList;
